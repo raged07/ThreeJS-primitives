@@ -9,12 +9,24 @@
         renderer.shadowMap.soft = true;
         renderer.shadowMap.type = THREE.PCFShadowMap;
 /////////////////// CAMARA ///////////////////////////////////
+//Aquí en la cámara le vamos a dar una posición en z de 10, en y de 130 y en x de -1.5
         camera.position.z = 10;
         camera.position.y = 130;
         camera.rotation.x = -1.5;
 
         let loader = new THREE.TextureLoader();
 /////////////////// PLANO////BACKGROUND ///////////////////////////
+/**Le agregamos una imagen de cancha de básquetbol como textura, creamos la geometría del plano 
+de 300,250 luego agregamos un applymatrix que multiplica la matriz actual por la que se 
+especifica, que es una matrix4 la cual va efectuar una rotación de pi/2.
+Luego vamos a crear el material de fondo creando una nueva propiedad de three que se llama 
+MeshPhongMaterial que es un material para superficies brillantes con reflejos espectaculares, le
+ agregamos textura al plano y a la cara le vamos agregar la propiedad Three.doublesize para que la 
+imagen se vea por los dos lados
+Luego en el plano vamos a crear una nueva propiedad de Three que se llama mesh es una malla y 
+a esa propiedad le vamos a agregar el material del plano y la geometría plana, luego le vamos 
+agregar sombra y vamos agregar el plano a la escena.
+ */
     loader.load('public/basket.jpg', function(texture){
         let planeGeometry = new THREE.PlaneGeometry(300,250);
         planeGeometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI/2));
@@ -27,42 +39,65 @@
         scene.add(plane);
         });
 //////////////////////// CUBO ////////////////////////////////
-        let geometry = new THREE.BoxGeometry(20,20,20,20);
-        let groundMaterialC = new THREE.MeshPhongMaterial({
+        /*ancho - Ancho de los lados en el eje X.
+        altura - Altura de los lados en el eje Y.
+        profundidad - Profundidad de los lados en el eje Z.
+        widthSegments- Número de caras segmentadas a lo largo del ancho de los lados.*/
+        let geometry = new THREE.BoxGeometry(20,20,20,20);//creamos nuestro cubo
+        let groundMaterialC = new THREE.MeshPhongMaterial({//hacemos el material brillante con reflejos
             color: 0xff00ff
             //,wireframe: true
         });
-        let cube = new THREE.Mesh(geometry, groundMaterialC);
-        cube.castShadow = true;
+        let cube = new THREE.Mesh(geometry, groundMaterialC); //mostramos nuestro cubo
+        cube.castShadow = true;//en verdadero si el objeto tapa la luz, por lo que proyecta una sombra. 
+        cube.receiveShadow = true;//en verdadero si se supone que el objeto recibirá sombras.
 
 ////////////// TOROIDE (DONA xD) ////////////////////////////
-       let geometryT = new THREE.TorusGeometry( 15, 5, 20, 100 );
-       let material = new THREE.MeshPhongMaterial({ 
+        /*radio
+        tubo - Diámetro del tubo.
+        radialSegments
+        tubularSegments
+        */
+       let geometryT = new THREE.TorusGeometry( 15, 5, 20, 100 );// creamos nuestra dona
+       let material = new THREE.MeshPhongMaterial({ // hacer el material brillante con reflejos
            color: 0xffff00 
            //,wireframe: true
         } );
-       let torus = new THREE.Mesh( geometryT, material );
+       let torus = new THREE.Mesh( geometryT, material );// mostramos nuestra dona
        
-        torus.castShadow = true;
-        torus.castShadow = true;
+        torus.receiveShadow = true;//en verdadero si se supone que el objeto recibirá sombras.
+        torus.castShadow = true;//en verdadero si el objeto tapa la luz, por lo que proyecta una sombra. 
 
 ////////////////////// PIRAMIDE //////////////////////////////
+        /*radioTop - Radio del cilindro en la parte superior.
+        RadiusBottom - Radio del cilindro en la parte inferior.
+        altura - Altura del cilindro.
+        radiusSegments - Número de caras segmentadas alrededor de la circunferencia del cilindro.*/
         let geometryP = new THREE.CylinderGeometry( 0, 20, 20, 4 );
-        let materialP = new THREE.MeshPhongMaterial( {
-            color: 0x00ffff 
+// Un material para superficies brillantes con reflejos especulares
+        let materialP = new THREE.MeshPhongMaterial( { 
+            color: 0x00ffff //su parametro es color aqua
             //, wireframe:true
         } );
-        let pyramid = new THREE.Mesh( geometryP, materialP );
-        let c=0;
+        let pyramid = new THREE.Mesh( geometryP, materialP );// mostramos nuestra piramide
         
-        pyramid.receiveShadow = true;
-        pyramid.castShadow = true;
+        
+        pyramid.receiveShadow = true;//en verdadero si se supone que el objeto recibirá sombras.
+        pyramid.castShadow = true; //en verdadero si el objeto tapa la luz, por lo que proyecta una sombra. 
 ///////////////////// LUZ //////////////////////////////////
-        let pointLight = new THREE.PointLight(0x606060);
-    
+                //Ambiental
+        let pointLight = new THREE.PointLight(0x606060);//Una luz que se emite desde un único punto en todas las direcciones
+                //Puntual
         pointLight.position.y = 60;
         pointLight.position.z = 10;
 /////////////////// POSICIONES /////////////////////////////
+        /*El cubo va a quedar en posición en x de -60 y de y en 25; La dona va a quedar en la posición de y 
+        en 20 y en z en -40; la pirámide va a quedar en una posición de x,y, y z, y en 25, x en 50, y z en 30.
+        El punto de la luz va a arrojar una sombra.
+        Le agregamos color a la escena, un color gris, luego le agregaremos a la escena una luz ambiental 
+        entre gis y negro.
+        Y por último agregamos las figuras a la escena y el punto de luz. */
+
         cube.position.x = -60;
         cube.position.y = 25;
 
